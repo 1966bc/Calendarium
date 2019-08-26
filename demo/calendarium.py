@@ -5,6 +5,7 @@ How import;
 from calendarium import Calendarium
 
 How nstantiate in your frame:
+self.start_date = Calendarium(self)
 self.start_date = Calendarium(self,"Start Date")
 
 How pack:
@@ -70,30 +71,38 @@ class Calendarium(tk.Frame):
     def get_calendarium(self, container, row=None, col=None):
         
 
-        w = tk.LabelFrame(container, text=self.name,  foreground="blue",borderwidth=2,padx=2,pady=2)
+        w = tk.LabelFrame(container,
+                          text=self.name,
+                          borderwidth=1,padx=2,pady=2,
+                          relief=tk.GROOVE)
 
-        d = tk.Spinbox(w, bg='white', fg='blue',width=2,
+
+        day_label = tk.LabelFrame(w, text="Day",)
+
+        d = tk.Spinbox(day_label, bg='white', fg='blue',width=2,
                        from_=1, to=31,
                        validate = 'key',
                        validatecommand = self.vcmd,
                        textvariable=self.day,
                        relief=tk.GROOVE,)
-        
-        m = tk.Spinbox(w, bg='white',fg='blue', width=2,
+
+        month_label = tk.LabelFrame(w, text="Month")
+        m = tk.Spinbox(month_label, bg='white',fg='blue', width=2,
                        from_=1, to=12,
                        validate = 'key',
                        validatecommand = self.vcmd,
                        textvariable=self.month,
                        relief=tk.GROOVE,)
 
-        y = tk.Spinbox(w, bg='white', fg='blue',width=4,
+        year_label = tk.LabelFrame(w, text="Year")
+        y = tk.Spinbox(year_label, bg='white', fg='blue',width=4,
                        validate = 'key',
                        validatecommand = self.vcmd,
                        from_=1900, to=3000,
                        textvariable=self.year,
                        relief=tk.GROOVE,)
 
-        for p,i in enumerate((d,m,y)):
+        for p,i in enumerate((day_label,d,month_label,m,year_label,y)):
              if  row is not None:
                  i.grid(row=0, column=p, padx=5, pady=5,sticky=tk.W)
              else:
