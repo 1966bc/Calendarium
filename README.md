@@ -6,7 +6,7 @@ a primitive light class to manage calendar date in tkinter projects using dateti
 
 Provides a primitive class widget to manage calendar date in tkinter projects.
 
-## How import;
+## How import:
 
 from calendarium import Calendarium
 
