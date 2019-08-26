@@ -6,19 +6,17 @@ a primitive light class to manage calendar date in tkinter projects using dateti
 
 Provides a primitive class widget to manage calendar date in tkinter projects.
 
-##How import;
+## How import;
 
 from calendarium import Calendarium
 
-##How nstantiate in your frame:
-
-self.start_date = Calendarium(self)
+## How nstantiate in your frame:
 
 self.start_date = Calendarium(self,"Start Date")
 
-##How pack:
+## How pack:
 
-#f is a tkinter widget such as Frame
+f is a tkinter widget such as Frame
 
 if use row and col
 
@@ -28,11 +26,11 @@ If use pack()
 
 self.start_date.get_calendarium(f,)
 
-##Hoe set today date:
+## How set today date:
 
 self.start_date.set_today()
 
-##How check if a date is right formated do something like:
+## How check if a date is right formated do something like:
 
 before you must import this:
 from tkinter import messagebox
@@ -49,5 +47,5 @@ Notice that in the spinbox widget we allowed only integers.
 
 Calendarium use datetime.date to set/get date.
 
-####Calendarium it's primitive bbut It's working and it's light.
+** Calendarium it's primitive but It's working and it's light. **
 
