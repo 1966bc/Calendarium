@@ -37,11 +37,13 @@ Check if a date is right formated do something like:
 before you must import this:
 from tkinter import messagebox
 
-<code>
+```python
+
 if self.start_date.get_date()==False:
     msg = "Date format error"
     messagebox.showerror('My Title', msg, parent=self)
-</code>
+```
+
 
 Notice that in the spinbox widget we allowed only integers.
 
