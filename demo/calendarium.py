@@ -5,7 +5,6 @@ How import;
 from calendarium import Calendarium
 
 How nstantiate in your frame:
-self.start_date = Calendarium(self)
 self.start_date = Calendarium(self,"Start Date")
 
 How pack:
