@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Provides a primitive widget to manage calendar date in tkinter projects.
+"""Provides a primitive light widget to manage calendar date in tkinter projects.
 
 How import;
 from calendarium import Calendarium
