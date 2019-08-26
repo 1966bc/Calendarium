@@ -1,7 +1,7 @@
 # Calendarium
 a primitive light class to manage calendar date in tkinter projects using datetime lib.
 
-![alt tag](https://user-images.githubusercontent.com/5463566/63676221-c0a7ae00-c7ea-11e9-805b-b192f895806f.png)
+![alt tag](https://user-images.githubusercontent.com/5463566/63707533-6e8a7b00-c832-11e9-8aa1-81784ec003a7.png)
 
 
 Provides a primitive class widget to manage calendar date in tkinter projects.
