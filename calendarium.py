@@ -53,8 +53,7 @@ class Calendarium(tk.Frame):
         self.args = args
         self.kwargs = kwargs
 
-        self.vcmd = (self.register(self.validate),
-                     '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+        self.vcmd = (self.register(self.validate), '%d', '%P', '%S')
 
         self.caller = caller
         self.name = name
@@ -71,38 +70,30 @@ class Calendarium(tk.Frame):
     def get_calendarium(self, container, row=None, col=None):
         
 
-        w = tk.LabelFrame(container,
-                          text=self.name,
-                          borderwidth=1,padx=2,pady=2,
-                          relief=tk.GROOVE)
+        w = tk.LabelFrame(container, text=self.name,  foreground="blue",borderwidth=2,padx=2,pady=2)
 
-
-        day_label = tk.LabelFrame(w, text="Day",)
-
-        d = tk.Spinbox(day_label, bg='white', fg='blue',width=2,
+        d = tk.Spinbox(w, bg='white', fg='blue',width=2,
                        from_=1, to=31,
                        validate = 'key',
                        validatecommand = self.vcmd,
                        textvariable=self.day,
                        relief=tk.GROOVE,)
-
-        month_label = tk.LabelFrame(w, text="Month")
-        m = tk.Spinbox(month_label, bg='white',fg='blue', width=2,
+        
+        m = tk.Spinbox(w, bg='white',fg='blue', width=2,
                        from_=1, to=12,
                        validate = 'key',
                        validatecommand = self.vcmd,
                        textvariable=self.month,
                        relief=tk.GROOVE,)
 
-        year_label = tk.LabelFrame(w, text="Year")
-        y = tk.Spinbox(year_label, bg='white', fg='blue',width=4,
+        y = tk.Spinbox(w, bg='white', fg='blue',width=4,
                        validate = 'key',
                        validatecommand = self.vcmd,
                        from_=1900, to=3000,
                        textvariable=self.year,
                        relief=tk.GROOVE,)
 
-        for p,i in enumerate((day_label,d,month_label,m,year_label,y)):
+        for p,i in enumerate((d,m,y)):
              if  row is not None:
                  i.grid(row=0, column=p, padx=5, pady=5,sticky=tk.W)
              else:
@@ -135,9 +126,7 @@ class Calendarium(tk.Frame):
         return (caller.register(self.validate_integer),
              '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')        
 
-    def validate(self, action, index, value_if_allowed,
-                 prior_value, text, validation_type,
-                 trigger_type, widget_name):
+    def validate(self, action, value_if_allowed, text,):
         # action=1 -> insert
         if(action=='1'):
             if text in '0123456789':
@@ -149,4 +138,4 @@ class Calendarium(tk.Frame):
             else:
                 return False
         else:
-            return True        
+            return True          
