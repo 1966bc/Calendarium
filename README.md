@@ -23,13 +23,13 @@ self.start_date = Calendarium(self,"Start Date")
 
 f is a tkinter widget such as Frame,LabelFrame
 
-# if use grid method
+- if use grid method
 
 ```python
 self.start_date.get_calendarium(f, row, col)
 ```
 
-# If use pack method
+- If use pack method
 
 ```python
 self.start_date.get_calendarium(f,)
