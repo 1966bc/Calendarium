@@ -31,6 +31,7 @@ class Main(ttk.Frame):
 
         ttk.Button(w, text="Print Date", command=self.on_callback).pack()
         ttk.Button(w, text="Set Today", command=self.on_reset).pack()
+        ttk.Button(w, text="Compare", command=self.on_compare).pack()
         ttk.Button(w, text="Close", command=self.on_close).pack()
 
         f.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
@@ -57,6 +58,29 @@ class Main(ttk.Frame):
     def on_reset(self):
         self.start_date.set_today()
         self.end_date.set_today()
+
+    def on_compare(self):
+
+        if self.start_date.get_date(self)==False:
+            return
+        else:
+            d1 = self.start_date.get_date(self)
+
+        if self.end_date.get_date(self)==False:
+            return
+
+        else:
+            d2 = self.end_date.get_date(self)
+
+        if d1 > d2:
+            msg = "{0} is greater than {1} :".format(self.start_date.name,self.end_date.name)
+        elif d1 < d2:
+            msg = "{0} is less than {1} :".format(self.start_date.name,self.end_date.name)
+        else:
+            msg = "{0} is equal than {1} :".format(self.start_date.name,self.end_date.name)
+            
+        messagebox.showinfo(self.parent.title(), msg, parent=self)                   
+            
       
     def on_close(self):
         self.parent.on_exit()
