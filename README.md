@@ -1,5 +1,6 @@
 # Calendarium
-a primitive light class to manage calendar date in tkinter projects using datetime lib.
+
+###### a primitive light class to manage calendar date in tkinter projects using datetime lib.
 
 ![alt tag](https://user-images.githubusercontent.com/5463566/63707533-6e8a7b00-c832-11e9-8aa1-81784ec003a7.png)
 
@@ -51,5 +52,4 @@ Notice that in the spinbox widget we allowed only integers.
 
 Calendarium use datetime.date to set/get date.
 
-** Calendarium it's primitive but It's working and it's light. **
-
+######  Calendarium it's primitive but It's working and it's light.
