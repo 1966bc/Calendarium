@@ -69,12 +69,14 @@ class Calendarium(tk.Frame):
 
         w = tk.LabelFrame(container,
                           text=self.name,
+                          font=12,
+                          bg='white',
                           borderwidth=1,
                           padx=2,pady=2,
                           relief=tk.GROOVE,)
 
 
-        day_label = tk.LabelFrame(w, text="Day")
+        day_label = tk.LabelFrame(w, bg='white', text="Day")
 
         d = tk.Spinbox(day_label, bg='white', fg='blue',width=2,
                        from_=1, to=31,
@@ -83,7 +85,7 @@ class Calendarium(tk.Frame):
                        textvariable=self.day,
                        relief=tk.GROOVE,)
 
-        month_label = tk.LabelFrame(w, text="Month")
+        month_label = tk.LabelFrame(w, bg='white', text="Month")
         m = tk.Spinbox(month_label, bg='white',fg='blue', width=2,
                        from_=1, to=12,
                        validate = 'key',
@@ -91,7 +93,7 @@ class Calendarium(tk.Frame):
                        textvariable=self.month,
                        relief=tk.GROOVE,)
 
-        year_label = tk.LabelFrame(w, text="Year")
+        year_label = tk.LabelFrame(w, bg='white', text="Year")
         y = tk.Spinbox(year_label, bg='white', fg='blue',width=4,
                        validate = 'key',
                        validatecommand = self.vcmd,
