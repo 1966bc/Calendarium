@@ -8,38 +8,42 @@ Provides a primitive class widget to manage calendar date in tkinter projects.
 
 ## How import:
 
+```python
 from calendarium import Calendarium
+```
 
-## How nstantiate in your frame:
+## How instantiate in your frame:
 
+```python
 self.start_date = Calendarium(self,"Start Date")
+```
 
 ## How pack:
 
-f is a tkinter widget such as Frame
+f is a tkinter widget such as Frame,LabelFrame
 
-if use row and col
+# if use grid method
 
+```python
 self.start_date.get_calendarium(f, row, col)
+```
 
-If use pack()
+# If use pack method
 
+```python
 self.start_date.get_calendarium(f,)
+```
 
 ## How set today date:
 
+```python
 self.start_date.set_today()
+```
 
-## How check if a date is right formated do something like:
-
-before you must import this:
-from tkinter import messagebox
+## How check if a date is right formated:
 
 ```python
-
-if self.start_date.get_date()==False:
-    msg = "Date format error"
-    messagebox.showerror('My Title', msg, parent=self)
+if self.start_date.get_date(self)==False:return
 ```
 
 
