@@ -126,7 +126,8 @@ class Calendarium(tk.Frame):
         try:
             return datetime.date(self.year.get(), self.month.get(), self.day.get())
         except ValueError:
-            msg = "Date format error:\n%s"%str(sys.exc_info()[1])
+            msg = "{0}\nDate format error:\n{1}".format(self.name,
+                                                  str(sys.exc_info()[1]))
             messagebox.showerror(caller.parent.title(), msg, parent=caller)
             return False
 

@@ -29,7 +29,7 @@ class Main(ttk.Frame):
               
         w = ttk.Frame()
 
-        ttk.Button(w, text="Callback", command=self.on_callback).pack()
+        ttk.Button(w, text="Print Date", command=self.on_callback).pack()
         ttk.Button(w, text="Set Today", command=self.on_reset).pack()
         ttk.Button(w, text="Close", command=self.on_close).pack()
 
@@ -49,8 +49,8 @@ class Main(ttk.Frame):
         if self.end_date.get_date(self)==False:
             return
         else:
-            msg = "{0}:{1}\n{2}:{3}".format(self.start_date.name,self.start_date.get_date(self),
-                                            self.end_date.name,self.end_date.get_date(self))
+            msg = "{0}: {1}\n{2}: {3}".format(self.start_date.name,self.start_date.get_date(self),
+                                              self.end_date.name,self.end_date.get_date(self))
             
         messagebox.showinfo(self.parent.title(), msg, parent=self)            
         
@@ -83,7 +83,7 @@ class App(tk.Tk):
         
 
     def set_title(self):
-        s = "{0}".format('Simple App')
+        s = "{0}".format('My App')
         self.title(s)
         
     def on_exit(self):
