@@ -52,4 +52,4 @@ Notice that in the spinbox widget we allowed only integers.
 
 Calendarium use datetime.date to set/get date.
 
-######  Calendarium it's primitive but It's working and it's light.
+#  Calendarium it's primitive but It's working and it's light.
