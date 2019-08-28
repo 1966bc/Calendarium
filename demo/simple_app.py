@@ -37,20 +37,20 @@ class Main(ttk.Frame):
         w.pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
 
     def on_open(self):
-        self.start_date.set_today()
-        self.end_date.set_today()
+        pass
+        #self.start_date.set_today()
+        #self.end_date.set_today()
 
     def on_callback(self,):
 
-        if self.start_date.get_date()==False:
-            msg = "{0} return a {1} date.".format(self.start_date.name,self.start_date.get_date(),)
+        if self.start_date.get_date(self)==False:return
             
-        elif self.end_date.get_date()==False:
-            msg = "{0} return a {1} date.".format(self.end_date.name,self.end_date.get_date(),)
             
+        if self.end_date.get_date(self)==False:
+            return
         else:
-            msg = "{0}:{1}\n{2}:{3}".format(self.start_date.name,self.start_date.get_date(),
-                                            self.end_date.name,self.end_date.get_date())
+            msg = "{0}:{1}\n{2}:{3}".format(self.start_date.name,self.start_date.get_date(self),
+                                            self.end_date.name,self.end_date.get_date(self))
             
         messagebox.showinfo(self.parent.title(), msg, parent=self)            
         

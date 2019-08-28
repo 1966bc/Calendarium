@@ -4,15 +4,15 @@
 How import;
 from calendarium import Calendarium
 
-How nstantiate in your frame:
-self.start_date = Calendarium(self)
+How instantiate in your frame:
+
 self.start_date = Calendarium(self,"Start Date")
 
 How pack:
-#f is a tkinter widget such as Frame
-if use row and col
+#f is a tkinter widget such as Frame,LabelFrame
+if use grid method
 self.start_date.get_calendarium(f, row, col)
-If use pack()
+If use pack method
 self.start_date.get_calendarium(f,)
 
 Set today date:
@@ -20,20 +20,17 @@ self.start_date.set_today()
 
 Check if a date is right formated:
 
-before you must import this:
-from tkinter import messagebox
-
-if self.start_date.get_date()==False:
-    msg = "Date format error"
-    messagebox.showerror('My Title', msg, parent=self)
+if self.start_date.get_date(self)==False:return
 
 Notice that in the spinbox widget we allowed only integers.
 Calendarium use datetime.date to set/get date.
 
 """
+import sys
 import datetime
 from datetime import date
 import tkinter as tk
+from tkinter import messagebox
 
 
 __author__ = "1966bc aka giuseppe costanzi"
@@ -70,34 +67,43 @@ class Calendarium(tk.Frame):
     def get_calendarium(self, container, row=None, col=None):
         
 
-        w = tk.LabelFrame(container, text=self.name,  foreground="blue",borderwidth=2,padx=2,pady=2)
+        w = tk.LabelFrame(container,
+                          text=self.name,
+                          borderwidth=1,
+                          padx=2,pady=2,
+                          relief=tk.GROOVE,)
 
-        d = tk.Spinbox(w, bg='white', fg='blue',width=2,
+
+        day_label = tk.LabelFrame(w, text="Day")
+
+        d = tk.Spinbox(day_label, bg='white', fg='blue',width=2,
                        from_=1, to=31,
                        validate = 'key',
                        validatecommand = self.vcmd,
                        textvariable=self.day,
                        relief=tk.GROOVE,)
-        
-        m = tk.Spinbox(w, bg='white',fg='blue', width=2,
+
+        month_label = tk.LabelFrame(w, text="Month")
+        m = tk.Spinbox(month_label, bg='white',fg='blue', width=2,
                        from_=1, to=12,
                        validate = 'key',
                        validatecommand = self.vcmd,
                        textvariable=self.month,
                        relief=tk.GROOVE,)
 
-        y = tk.Spinbox(w, bg='white', fg='blue',width=4,
+        year_label = tk.LabelFrame(w, text="Year")
+        y = tk.Spinbox(year_label, bg='white', fg='blue',width=4,
                        validate = 'key',
                        validatecommand = self.vcmd,
                        from_=1900, to=3000,
                        textvariable=self.year,
                        relief=tk.GROOVE,)
 
-        for p,i in enumerate((d,m,y)):
-             if  row is not None:
-                 i.grid(row=0, column=p, padx=5, pady=5,sticky=tk.W)
-             else:
-                 i.pack(side=tk.LEFT, fill=tk.X, padx=2)
+        for p,i in enumerate((day_label,d,month_label,m,year_label,y)):
+            if  row is not None:
+                i.grid(row=0, column=p, padx=5, pady=5,sticky=tk.W)
+            else:
+                i.pack(side=tk.LEFT, fill=tk.X, padx=2)
                  
                  
         if row is not None:
@@ -115,17 +121,28 @@ class Calendarium(tk.Frame):
         self.month.set(today.month)
         self.year.set(today.year)
 
-    def get_date(self,):
+    def get_date(self,caller):
 
         try:
             return datetime.date(self.year.get(), self.month.get(), self.day.get())
-        except:
+        except ValueError:
+            msg = "Date format error:\n%s"%str(sys.exc_info()[1])
+            messagebox.showerror(caller.parent.title(), msg, parent=caller)
             return False
 
-    def get_validate_integer(self, caller ):
-        return (caller.register(self.validate_integer),
-             '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')        
+        
+    def get_timestamp(self,):
 
+        t = datetime.datetime.now()
+        
+        return datetime.datetime(self.year.get(),
+                                 self.month.get(),
+                                 self.day.get(),
+                                 t.hour ,
+                                 t.minute,
+                                 t.second)
+            
+        
     def validate(self, action, value_if_allowed, text,):
         # action=1 -> insert
         if(action=='1'):
