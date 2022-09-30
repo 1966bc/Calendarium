@@ -2,7 +2,7 @@
 
 a primitive light class to manage calendar date in tkinter projects using datetime lib.
 
-![alt tag](https://user-images.githubusercontent.com/5463566/63840216-f7afc800-c980-11e9-98c7-1c283cd8dae6.png)
+![alt tag](https://user-images.githubusercontent.com/5463566/193236323-077a6141-f4f5-463b-9fd1-a0eb1aa4a0e3.png)
 
 
 Provides a primitive class widget to manage calendar date in tkinter projects.
