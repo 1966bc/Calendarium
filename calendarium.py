@@ -66,7 +66,8 @@ class Calendarium(tk.Frame):
     def __init__(self, caller, description=None,):
         super().__init__()
 
-        
+
+        self.set_style()
         self.vcmd = (self.register(self.validate), "%d", "%P", "%S")
 
         self.caller = caller
