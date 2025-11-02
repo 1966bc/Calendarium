@@ -21,18 +21,16 @@ self.start_date = Calendarium(self,"Start Date")
 
 ## How pack:
 
-f is a tkinter widget such as Frame,LabelFrame
-
 - if use grid method
 
 ```python
-self.start_date.get_calendarium(f, row, col)
+ self.start_date.grid(row=r, column=c, sticky=tk.W) 
 ```
 
 - If use pack method
 
 ```python
-self.start_date.get_calendarium(f,)
+self.start_date.pack(padx=2, pady=2)
 ```
 
 ## How set today date:
@@ -44,7 +42,7 @@ self.start_date.set_today()
 ## How check if a date is right formated:
 
 ```python
-if self.start_date.get_date(self)==False:return
+if not self.start_date.is_valid::return
 ```
 
 
