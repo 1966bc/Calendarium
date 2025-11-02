@@ -19,6 +19,12 @@ from calendarium import Calendarium
 self.start_date = Calendarium(self,"Start Date")
 ```
 
+## How pass background color, optional:
+
+```python
+self.start_date = Calendarium(self,"Start Date", base_bg_color=(240, 240, 237))
+```
+
 ## How pack:
 
 - if use grid method
