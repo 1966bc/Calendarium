@@ -48,7 +48,7 @@ self.start_date.set_today()
 ## How check if a date is right formated:
 
 ```python
-if not self.start_date.is_valid::return
+if not self.start_date.is_valid:return
 ```
 
 
