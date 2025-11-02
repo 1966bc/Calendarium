@@ -1,187 +1,186 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# modify:   ver MMXXV 
 """
 Calendarium - A primitive calendar date widget for Tkinter projects.
 
 Usage:
+
     from calendarium import Calendarium
+    self.start_date = Calendarium(frm_left, "Start Date")
+    # Use either grid *or* pack on the same parent, not both: #
+    self.start_date.grid(row=r, column=c, sticky=tk.W) 
+    self.received.pack(padx=2, pady=2)
+    self.received.set_today()
 
-    self.start_date = Calendarium(self, "Start Date")
-    self.start_date.get_calendarium(parent_frame, row=0, col=0)  # grid method
-    self.start_date.get_calendarium(parent_frame)  # pack method
-
-Features:
+    Features:
     - Set current date.
-    - Validate and retrieve selected date.
-    - Get a timestamp with current time.
-
+    - Validate via the read-only property is_valid and retrieve selected date.
+    - Get a timestamp using the current time of day combined with the selected date.
+    
 Author: Giuseppe Costanzi (1966bc)
 License: GNU GPL v3
-Version: 1.2
+Version: 2.3
 """
 
-import sys
-import datetime
+import datetime as _dt
 import tkinter as tk
 from tkinter import messagebox
 
 
-class Calendarium(tk.Frame):
-    def __init__(self, caller, name):
-        super().__init__()
-        
-        self.vcmd = (self.register(self.validate), '%d', '%P', '%S')
-        self.caller = caller
-        self.name = name
-        self.day = tk.IntVar()
-        self.month = tk.IntVar()
-        self.year = tk.IntVar()
+class Calendarium(tk.LabelFrame):
+    """Composite date widget using three Spinboxes (day, month, year)."""
 
-    def __str__(self):
-        return "class: {0}".format(self.__class__.__name__)
+    def __init__(
+        self,
+        parent,
+        name,
+        *,
+        base_bg_color=None,
+        year_from=_dt.MINYEAR,
+        year_to=_dt.MAXYEAR,
+        **kwargs
+    ) -> None:
+        super().__init__(parent, text=name, **kwargs)
 
-    def get_calendarium(self, container, row=None, col=None):
-        frame = tk.LabelFrame(
-            container,
-            text=self.name,
-            borderwidth=1,
-            padx=2,
-            pady=2,
-            relief=tk.GROOVE,
-            background="#f0f0ed",
-        )
+        self._year_from = int(year_from)
+        self._year_to = int(year_to)
 
-        day_frame = tk.LabelFrame(frame, background="#f0f0ed", text="Day")
-        day_spinbox = tk.Spinbox(
-            day_frame, width=2, from_=1, to=31,
-            validate='key', validatecommand=self.vcmd,
-            textvariable=self.day, bg='white', fg='blue', relief=tk.GROOVE
-        )
+        today = _dt.date.today()
+        self.day = tk.StringVar(value=str(today.day))
+        self.month = tk.StringVar(value=str(today.month))
+        self.year = tk.StringVar(value=str(today.year))
 
-        month_frame = tk.LabelFrame(frame, background="#f0f0ed", text="Month")
-        month_spinbox = tk.Spinbox(
-            month_frame, width=2, from_=1, to=12,
-            validate='key', validatecommand=self.vcmd,
-            textvariable=self.month, bg='white', fg='blue', relief=tk.GROOVE
-        )
+        self._vcmd = (self.register(self._digits_only), "%d", "%P", "%S")
 
-        year_frame = tk.LabelFrame(frame, background="#f0f0ed", text="Year")
-        year_spinbox = tk.Spinbox(
-            year_frame, width=4, from_=1900, to=3000,
-            validate='key', validatecommand=self.vcmd,
-            textvariable=self.year, bg='white', fg='blue', relief=tk.GROOVE
-        )
+        self._set_label_frame_background(base_bg_color)
 
-        widgets = [day_frame, day_spinbox, month_frame, month_spinbox, year_frame, year_spinbox]
+        self._spinboxes = {}
+        self._build_ui()
 
-        for idx, widget in enumerate(widgets):
-            if row is not None and col is not None:
-                widget.grid(row=0, column=idx, padx=5, pady=5, sticky=tk.W)
-            else:
-                widget.pack(side=tk.LEFT, fill=tk.X, padx=2)
+    def _build_ui(self):
+        lf_kwargs = {"bg": getattr(self, "_base_bg_color", None)}
 
-        if row is not None and col is not None:
-            frame.grid(row=row, column=col, sticky=tk.W)
-        else:
-            frame.pack()
+        day_frame = tk.LabelFrame(self, text="Day", **lf_kwargs)
+        day_spin = tk.Spinbox(day_frame, width=2, from_=1, to=31, fg="blue", textvariable=self.day, validate="key", validatecommand=self._vcmd)
+        day_frame.pack(side=tk.LEFT, fill=tk.X, padx=2)
+        day_spin.pack(padx=2, pady=2)
+        self._spinboxes["day"] = day_spin
 
-        return frame
+        month_frame = tk.LabelFrame(self, text="Month", **lf_kwargs)
+        month_spin = tk.Spinbox(month_frame, width=2, from_=1, to=12, fg="blue", textvariable=self.month, validate="key", validatecommand=self._vcmd)
+        month_frame.pack(side=tk.LEFT, fill=tk.X, padx=2)
+        month_spin.pack(padx=2, pady=2)
+        self._spinboxes["month"] = month_spin
+
+        year_frame = tk.LabelFrame(self, text="Year", **lf_kwargs)
+        year_spin = tk.Spinbox(year_frame, width=5, fg="blue", from_=self._year_from, to=self._year_to, textvariable=self.year, validate="key", validatecommand=self._vcmd)
+        year_frame.pack(side=tk.LEFT, fill=tk.X, padx=2)
+        year_spin.pack(padx=2, pady=2)
+        self._spinboxes["year"] = year_spin
+
+    def _set_label_frame_background(self, base_bg_color=None):
+        color = base_bg_color
+
+        if isinstance(color, tuple) and len(color) == 3:
+            try:
+                r, g, b = color
+                color = f"#{r:02x}{g:02x}{b:02x}"
+            except Exception:
+                color = None
+
+        if color is None:
+            try:
+                color = self.cget("bg")  # fallback to current theme color
+            except tk.TclError:
+                color = "#d9d9d9"  # final safe fallback (light gray)
+
+        self._base_bg_color = color
+        try:
+            self.configure(background=color)
+        except tk.TclError:
+            pass
+
+    @staticmethod
+    def _digits_only(action, value, text):
+        if action == "1":
+            return text.isdigit() or value == ""
+        return True
+
+    def _parse_int(self, var):
+        s = var.get()
+        if s == "":
+            return None
+        try:
+            return int(s)
+        except ValueError:
+            return None
 
     def set_today(self):
-        today = datetime.date.today()
-        self.day.set(today.day)
-        self.month.set(today.month)
-        self.year.set(today.year)
+        t = _dt.date.today()
+        self.set_date(t)
 
-    def get_date(self, caller):
+    def set_date(self, date_obj):
+        self.day.set(str(date_obj.day))
+        self.month.set(str(date_obj.month))
+        self.year.set(str(date_obj.year))
+
+    def set_from_datetime(self, dt_obj):
+        if isinstance(dt_obj, _dt.datetime):
+            dt_obj = dt_obj.date()
+        self.set_date(dt_obj)
+
+    @property
+    def is_valid(self):
+        d = self._parse_int(self.day)
+        m = self._parse_int(self.month)
+        y = self._parse_int(self.year)
+        if d is None or m is None or y is None:
+            return False
+        if not (self._year_from <= y <= self._year_to):
+            return False
         try:
-            return datetime.date(self.year.get(), self.month.get(), self.day.get())
-        except ValueError as e:
-            messagebox.showerror(caller.title(), f"Date format error:\n{e}", parent=caller)
+            _dt.date(y, m, d)
+            return True
+        except ValueError:
             return False
 
-    def get_timestamp(self): 
-        now = datetime.datetime.now()
-        return datetime.datetime(
-            self.year.get(), self.month.get(), self.day.get(),
-            now.hour, now.minute, now.second
-        )
+    def get_date(self):
+        if not self.is_valid:
+            return None
+        return _dt.date(int(self.year.get()), int(self.month.get()), int(self.day.get()))
 
-    def validate(self, action, value, text):
-        if action == '1':
-            if text.isdigit():
-                try:
-                    int(value)
-                    return True
-                except ValueError:
-                    return False
-            return False
-        return True
+    def get_timestamp(self):
+        d = self.get_date()
+        if not d:
+            return None
+        now = _dt.datetime.now().time()
+        return _dt.datetime.combine(d, now)
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Calendarium Demo")
 
-    cal = Calendarium(root, "Select Date")
-    cal_frame = cal.get_calendarium(root)
-    cal.set_today()
+    my_cal = Calendarium(root, "Select Date")
+    my_cal.pack(padx=8, pady=8)
+    my_cal.set_today()
 
     def show_date():
-        result = cal.get_date(root)
-        if result:
+        result = my_cal.get_date()
+        if result is not None:
             messagebox.showinfo("Selected Date", str(result))
+        else:
+            messagebox.showwarning("Selected Date", "Invalid date")
 
     def show_timestamp():
-        result = cal.get_timestamp()
-        messagebox.showinfo("Timestamp", str(result))
+        result = my_cal.get_timestamp()
+        if result is not None:
+            messagebox.showinfo("Timestamp", str(result))
+        else:
+            messagebox.showwarning("Timestamp", "Invalid date")
 
     tk.Button(root, text="Get Date", command=show_date).pack(pady=5)
     tk.Button(root, text="Get Timestamp", command=show_timestamp).pack(pady=5)
 
     root.mainloop()
-
-
-# unittest
-import unittest
-
-class TestCalendarium(unittest.TestCase):
-    def setUp(self):
-        self.root = tk.Tk()
-        self.cal = Calendarium(self.root, "Test Date")
-
-    def tearDown(self):
-        self.root.destroy()
-
-    def test_set_today(self):
-        today = datetime.date.today()
-        self.cal.set_today()
-        self.assertEqual(self.cal.day.get(), today.day)
-        self.assertEqual(self.cal.month.get(), today.month)
-        self.assertEqual(self.cal.year.get(), today.year)
-
-    def test_get_valid_date(self):
-        self.cal.day.set(15)
-        self.cal.month.set(6)
-        self.cal.year.set(2025)
-        date_obj = self.cal.get_date(self.root)
-        self.assertEqual(date_obj, datetime.date(2025, 6, 15))
-
-    def test_get_invalid_date(self):
-        self.cal.day.set(31)
-        self.cal.month.set(2)
-        self.cal.year.set(2025)
-        result = self.cal.get_date(self.root)
-        self.assertFalse(result)
-
-    def test_get_timestamp(self):
-        self.cal.day.set(1)
-        self.cal.month.set(1)
-        self.cal.year.set(2025)
-        ts = self.cal.get_timestamp()
-        self.assertEqual(ts.year, 2025)
-        self.assertEqual(ts.month, 1)
-        self.assertEqual(ts.day, 1)
-
-
-if __name__ == "__main__":
-    unittest.main()
