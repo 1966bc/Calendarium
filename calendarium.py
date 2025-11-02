@@ -10,8 +10,8 @@ Usage:
     self.start_date = Calendarium(frm_left, "Start Date")
     # Use either grid *or* pack on the same parent, not both: #
     self.start_date.grid(row=r, column=c, sticky=tk.W) 
-    self.received.pack(padx=2, pady=2)
-    self.received.set_today()
+    self.start_date.pack(padx=2, pady=2)
+    self.start_date.set_today()
 
     Features:
     - Set current date.
